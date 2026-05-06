@@ -10,8 +10,6 @@ services:
     restart: unless-stopped
     networks:
       - dokploy-network
-    ports:
-      - "8065:8065"
     environment:
       MM_SQLSETTINGS_DRIVERNAME: postgres
       MM_SQLSETTINGS_DATASOURCE: postgres://strapi:${HASHDROP_DB_PASSWORD}@hashdrop-hashdropdb-8eddhx:5432/mattermost?sslmode=disable&connect_timeout=10
@@ -30,6 +28,13 @@ services:
       - mattermost-config:/mattermost/config
       - mattermost-plugins:/mattermost/plugins
       - mattermost-client-plugins:/mattermost/client/plugins
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=dokploy-network"
+      - "traefik.http.routers.mattermost.rule=Host(`chat.metesahankurt.cloud`)"
+      - "traefik.http.routers.mattermost.entrypoints=websecure"
+      - "traefik.http.routers.mattermost.tls.certresolver=letsencrypt"
+      - "traefik.http.services.mattermost.loadbalancer.server.port=8065"
     security_opt:
       - no-new-privileges:true
     pids_limit: 200
