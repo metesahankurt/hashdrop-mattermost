@@ -28,13 +28,6 @@ services:
       - mattermost-config:/mattermost/config
       - mattermost-plugins:/mattermost/plugins
       - mattermost-client-plugins:/mattermost/client/plugins
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=dokploy-network"
-      - "traefik.http.routers.mattermost.rule=Host(`chat.metesahankurt.cloud`)"
-      - "traefik.http.routers.mattermost.entrypoints=websecure"
-      - "traefik.http.routers.mattermost.tls.certresolver=letsencrypt"
-      - "traefik.http.services.mattermost.loadbalancer.server.port=8065"
     security_opt:
       - no-new-privileges:true
     pids_limit: 200
